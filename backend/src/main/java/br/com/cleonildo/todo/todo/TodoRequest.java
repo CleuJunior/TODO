@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoResponse {
-    private long id;
+public class TodoRequest {
     private String description;
     private Boolean done;
 
