@@ -38,7 +38,7 @@ public class TodoController {
                                           @RequestParam(defaultValue = "asc") String direction) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
-        Page<Todo> todos = this.service.getAllTodos(pageable);
+        Page<Todo> todos = this.service.getAll(pageable);
 
         List<TodoResponse> response = todos.stream()
                 .map(todo -> TodoMapper.toTodoResponse(todo, this.mapper))
@@ -49,7 +49,7 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TodoResponse> getTodoById(@PathVariable Long id) {
-        Optional<Todo> todo = this.service.getTodoById(id);
+        Optional<Todo> todo = this.service.getById(id);
 
         if (todo.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -72,7 +72,7 @@ public class TodoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TodoResponse> updateTodo(@PathVariable Long id, @RequestBody TodoRequest request) {
-        Optional<Todo> existingTodo = this.service.getTodoById(id);
+        Optional<Todo> existingTodo = this.service.getById(id);
 
         if (existingTodo.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,12 +89,12 @@ public class TodoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodoById(@PathVariable Long id) {
-        Optional<Todo> todo = this.service.getTodoById(id);
+        Optional<Todo> todo = this.service.getById(id);
 
         if (todo.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        this.service.deleteTodoById(id);
+        this.service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
