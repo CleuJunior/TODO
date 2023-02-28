@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TodoResponse {
     private long id;
+    private String name;
     private String description;
     private Boolean done;
 

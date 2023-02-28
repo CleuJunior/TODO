@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TodoRequest {
+    private String name;
     private String description;
     private Boolean done;
 

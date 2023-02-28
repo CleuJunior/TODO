@@ -30,6 +30,11 @@ public class Todo {
     private long id;
 
     @Column
+    @Getter
+    @Setter
+    private String name;
+
+    @Column
     @Size(min = 10, max = 255)
     @Getter
     @Setter
@@ -58,7 +63,8 @@ public class Todo {
         created = LocalDateTime.now();
     }
 
-    public Todo(String description) {
+    public Todo(String name, String description) {
+        this.name = name;
         this.description = description;
         this.done = false;
     }
