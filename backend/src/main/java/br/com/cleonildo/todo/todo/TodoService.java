@@ -11,28 +11,38 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TodoService implements DAO<Todo> {
+public class TodoService implements TodoDAO {
 
     private final TodoRepository repository;
 
     @Override
     public Page<Todo> getAll(Pageable pageable) {
-        return repository.findAll(pageable);
+        return this.repository.findAll(pageable);
     }
 
     @Override
     public Optional<Todo> getById(Long id) {
-        return repository.findById(id);
+        return this.repository.findById(id);
+    }
+
+    @Override
+    public List<Todo> findListOfNames(String name) {
+        return this.repository.findByNameContains(name);
+    }
+
+    @Override
+    public List<Todo> findByDone(Boolean done) {
+        return this.repository.findByDone(done);
     }
 
     @Override
     public Todo createOrUpdateTodo(Todo todo) {
-        return repository.save(todo);
+        return this.repository.save(todo);
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        this.repository.deleteById(id);
     }
 
 }

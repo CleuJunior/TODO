@@ -28,8 +28,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TodoController {
 
-    private final TodoService service;
+    private final TodoDAO service;
     private final ModelMapper mapper;
+
 
     @GetMapping
     public List<TodoResponse> getAllTodos(@RequestParam(defaultValue = "0") int page,
@@ -45,6 +46,34 @@ public class TodoController {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(response, pageable, todos.getTotalElements()).getContent();
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<TodoResponse>> getListByName(@PathVariable String name) {
+        List<Todo> todos = this.service.findListOfNames(name);
+
+        if (todos.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        List<TodoResponse> response = todos.stream()
+                .map(todo -> TodoMapper.toTodoResponse(todo, this.mapper))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/done/{done}")
+    public ResponseEntity<List<TodoResponse>> getByDone(@PathVariable Boolean done) {
+        List<Todo> todos = this.service.findByDone(done);
+
+        if (todos.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        List<TodoResponse> response = todos.stream()
+                .map(todo -> TodoMapper.toTodoResponse(todo, this.mapper))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -78,7 +107,7 @@ public class TodoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         Todo update = existingTodo.get();
-        update.setDescription(request.getDescription());
+        update.setName(request.getDescription());
         update.setDone(request.getDone());
         update.setDoneDate(request.getDoneDate());
 
