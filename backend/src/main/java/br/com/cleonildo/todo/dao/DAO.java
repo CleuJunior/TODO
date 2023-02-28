@@ -12,6 +12,8 @@ public interface DAO<T> {
 
     Optional<T> getById(Long id);
 
+    List<T> findListOfNames(String name);
+
     T createOrUpdateTodo(T t);
 
     void deleteById(Long id);
